@@ -21,7 +21,7 @@
             <div v-for="produk in produks" :key="produk.id" class="col-md-3 col-6 mb-3">
                 <div class="card h-100 border-0 shadow rounded-md">
                     <div class="card-img">
-                        <img :src="produk.foto" class="w-100"
+                        <img :src="'http://127.0.0.1:8000/storage/produks/'+produk.foto" class="w-100"
                             style="height: 15em;object-fit:cover;bordertop-left-radius: .25rem;border-top-right-radius: .25rem;">
                     </div>
                     <div class="card-body">
