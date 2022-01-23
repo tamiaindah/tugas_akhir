@@ -21,10 +21,10 @@
                             </thead>
                             <tbody>
                                 <tr v-for="order in orders" :key="order.id">
-                                    <th>{{ order.invoice }}</th>
-                                    <td>{{ order.name }}</td>
-                                    <td>{{ order.courier.toUpperCase() }} | {{ order.service }} | Rp. {{ moneyFormat(order.cost_courier) }}</td>
-                                    <td>Rp. {{ moneyFormat(order.grand_total) }}</td>
+                                    <th>{{ order.kode_transaksi }}</th>
+                                    <td>{{ order.nama }}</td>
+                                    <td>{{ order.kurir.toUpperCase() }} | {{ order.service }} | Rp. {{ moneyFormat(order.ongkir) }}</td>
+                                    <td>Rp. {{ moneyFormat(order.total) }}</td>
                                     <td class="text-center">
                                         <router-link :to="{name: 'detail_order', params:{snap_token: order.snap_token}}" class="btn btn-sm btn-primary">DETAIL</router-link>
                                     </td>
