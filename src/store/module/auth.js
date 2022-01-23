@@ -51,7 +51,10 @@ const auth = {
                         name: user.name,
                         email: user.email,
                         password: user.password,
-                        password_confirmation: user.password_confirmation
+                        password_confirmation: user.password_confirmation,
+                        province: user.province,
+                        city: user.city,
+                        address: user.address
                     })
                     .then(response => {
 
@@ -103,29 +106,42 @@ const auth = {
         logout({ commit }) {
 
             //define callback promise
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
 
-                //commit ke mutation AUTH_LOGOUT
-                commit('AUTH_LOGOUT')
+                const token = localStorage.getItem('token')
 
-                //remove value dari localStorage
-                localStorage.removeItem('token')
-                localStorage.removeItem('user')
+                Api.defaults.headers.common['Authorization'] = "Bearer " + token
+                Api.post('/logout')
+                    .then( () => {
 
-                /**
-                * commit ke module cart, untuk set mutation dan state cart
-                menjadi kosong
-                */
-                commit('keranjang/GET_CART', 0, { root: true }) // <-- kita tambahkan root menjadi true, karena beda modulue
-                commit('keranjang/TOTAL_CART', 0, { root: true }) // <-- kita tambahkan root menjadi true, karena beda modulue
+                        //commit ke mutation AUTH_LOGOUT
+                        commit('AUTH_LOGOUT')
+        
+                        //remove value dari localStorage
+                        localStorage.removeItem('token')
+                        localStorage.removeItem('user')
 
-                //di atas kita set data-nya menjadi 0
+                        /**
+                        * commit ke module cart, untuk set mutation dan state cart
+                        menjadi kosong
+                        */
+                        commit('keranjang/GET_CART', 0, { root: true }) // <-- kita tambahkan root menjadi true, karena beda modulue
+                        commit('keranjang/TOTAL_CART', 0, { root: true }) // <-- kita tambahkan root menjadi true, karena beda modulue
+        
+                        //di atas kita set data-nya menjadi 0
+        
+                        //delete header axios
+                        delete Api.defaults.headers.common['Authorization']
+        
+                        //return resolve ke component
+                        resolve()
+                    }).catch(error => {
+                        //jika gagal, remove localStorage dengan key token
+                        localStorage.removeItem('token')
 
-                //delete header axios
-                delete Api.defaults.headers.common['Authorization']
-
-                //return resolve ke component
-                resolve()
+                        //reject ke component dengan hasil response
+                        reject(error.response.data)
+                    })
             })
         },
 
