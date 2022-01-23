@@ -5,7 +5,7 @@
             <hr>
             <ul class="list-group">
                 <router-link :to="{name: 'detail_kategori', params:{slug: kategori.slug}}" v-for="kategori in kategoris" :key="kategori.id" class="list-group-item shadow-sm font-weight-bold text-decoration-none text-dark">
-                    <img :src="kategori.foto" style="width:35px"> {{ kategori.nama }}
+                    <img :src="'http://127.0.0.1:8000/storage/kategori/'+kategori.foto" style="width:35px"> {{ kategori.nama }}
                 </router-link>
                 <router-link :to="{name: 'kategoris'}" class="list-group-item textcenter active shadow-sm font-weight-bold text-decoration-none">LIHAT KATEGORI LAINNYA <i class="fa fa-long-arrow-alt-right"></i></router-link>
             </ul>

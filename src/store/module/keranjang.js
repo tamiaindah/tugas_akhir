@@ -132,7 +132,7 @@ const keranjang = {
             const token = localStorage.getItem('token')
             //set axios header dengan type Authorization + Bearer token
             Api.defaults.headers.common['Authorization'] = "Bearer " + token
-            Api.get('/keranjang/totalWeight')
+            Api.get('/keranjang/totalBerat')
                 .then(response => {
 
                     //commit mutation CART_WEIGHT
@@ -177,6 +177,13 @@ const keranjang = {
         checkout({
             commit
         }, data) {
+
+            //get data token dan user
+            const token = localStorage.getItem('token')
+
+            //set axios header dengan type Authorization + Bearer token
+            Api.defaults.headers.common['Authorization'] = "Bearer " + token
+
             return new Promise((resolve, reject) => {
                 Api.post('/checkout', {
                         courier: data.courier_type,
@@ -193,7 +200,7 @@ const keranjang = {
                     .then(response => {
                         resolve(response.data)
                         //remove all Cart on database
-                        Api.post('/keranjangm/removeSemua')
+                        Api.post('/keranjang/removeSemua')
                             .then(() => {
                                 //clear cart
                                 commit('CLEAR_CART')

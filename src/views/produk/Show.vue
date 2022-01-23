@@ -4,7 +4,7 @@
             <div class="col-md-4">
                 <div class="card border-0 rounded shadow">
                     <div class="card-body p-2">
-                        <img :src="produk.foto" class="w-100 border">
+                        <img :src="'http://127.0.0.1:8000/storage/produks/'+produk.foto" class="w-100 border">
                     </div>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                     produk_id: produk_id,
                     harga: harga,
                     berat: berat,
-                    quantity: 1
+                    qty: 1
                 })
             }
             return {

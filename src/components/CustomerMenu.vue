@@ -34,6 +34,10 @@
                 router.push({
                 name: 'login'
                 })
+        }).catch(() => {
+            router.push({
+                name: 'login'
+                })
         })
     }
     

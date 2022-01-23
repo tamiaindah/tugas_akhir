@@ -12,7 +12,7 @@
                                 <tr v-for="keranjang in keranjangs" :key="keranjang.id" style="background: #edf2f7;">
                                     <td class="b-none" width="25%">
                                         <div class="wrapper-image-cart">
-                                            <img :src="keranjang.produk.foto" style="width: 100%;border-radius: .5rem">
+                                            <img :src="'http://127.0.0.1:8000/storage/produks/'+keranjang.produk.foto" style="width: 100%;border-radius: .5rem">
                                         </div>
                                     </td>
                                     <td class="b-none" width="50%">
@@ -82,7 +82,7 @@
                 <div class="card border-0 shadow rounded">
                     <!-- start ongkos kirim -->
                     <div class="card-body">
-                        <h5><i class="fa fa-user-circle"></i> RINCIAN PENGIRIMAN</h5>
+                        <h5><i class="fa fa-user-circle"></i> PENERIMA</h5>
                         <hr>
                         <div class="row">
                             <div class="col-md-6">
@@ -98,13 +98,23 @@
                                     <div v-if="validation.phone" class="mt-2 alert alert-danger"> Masukkan No. Telp </div>
                                 </div>
                             </div>
+                        </div>
+                        <h5 class="mt-3"><i class="fa fa-user-circle"></i> ALAMAT PENGIRIMAN</h5>
+                        <hr>
+                        <div class="mb-4">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="state.checkbox" @change="toggleAddress(state.checkbox)">
+                                <label class="custom-control-label" for="customCheck1">Gunakan alamat pribadi</label>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="font-weight-bold">PROVINSI</label>
-                                    <select class="form-control" v-model="state.province_id" @change="getCities">
+                                    <select class="form-control" v-model="state.provinsi_id" @change="getCities">
                                         <option value="">-- pilih provinsi --</option>
-                                        <option v-for="province in state.provinces" :key="province.id" :value="province.province_id">
-                                            {{ province.name }}</option>
+                                        <option v-for="province in state.provinces" :key="province.id" :value="province.provinsi_id">
+                                            {{ province.nama }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -113,7 +123,7 @@
                                     <label class="font-weight-bold">KOTA / KABUPATEN</label>
                                     <select class="form-control" v-model="state.city_id" @change="getCourier">
                                         <option value="">-- pilih kota --</option>
-                                        <option v-for="city in state.cities" :key="city.id" :value="city.city_id">{{ city.name }}
+                                        <option v-for="city in state.cities" :key="city.id" :value="city.kota_id">{{ city.nama }}
                                         </option>
                                     </select>
                                 </div>
@@ -138,7 +148,7 @@
                                     <label class="font-weightbold">SERVICE KURIR</label>
                                     <br>
                                     <div v-for="value in state.costs" :key="value.service" class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="cost" :id="value.service" :value="value.cost[0].value+'|'+value.service" vmodel="state.costService" @change="getCostService">
+                                        <input class="form-check-input" type="radio" name="cost" :id="value.service" :value="value.cost[0].value+'|'+value.service" v-model="state.costService" @change="getCostService">
                                         <label class="form-check-label font-weight-normal mr-5" :for="value.service"> {{ value.service }} - Rp. {{ moneyFormat(value.cost[0].value) }}</label>
                                     </div>
                                 </div>
@@ -146,7 +156,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="font-weightbold">ALAMAT LENGKAP</label>
-                                    <textarea class="form-control" id="alamat" rows="3" placeholder="Alamat Lengkap&#10;&#10;Contoh: Perum. Griya Palem Indah, B-17 Jombang Jawa Timur 61419" vmodel="state.address"></textarea>
+                                    <textarea class="form-control" id="alamat" rows="3" placeholder="Alamat Lengkap&#10;&#10;Contoh: Perum. Griya Palem Indah, B-17 Jombang Jawa Timur 61419" v-model="state.address"></textarea>
                                     <div v-if="validation.address" class="mt-2 alert alert-danger"> Masukkan Alamat Lengkap </div>
                                 </div>
                             </div>
@@ -192,6 +202,7 @@
                 store.dispatch('keranjang/cartCount') // <-- untuk memanggil action "cartCount" di module "cart"
                 store.dispatch('keranjang/cartTotal') // <-- untuk memanggil action "cartTotal" di module "cart"
                 store.dispatch('keranjang/cartWeight') // <-- untuk memanggil action "cartWeight" di module "cart"
+                getUser()
             })
 
             //get data cart dari getters cart di module cart
@@ -225,7 +236,7 @@
                 phone: '', // <-- state phone
                 address: '', // <-- state address
                 provinces: [], // <-- state provinces
-                province_id: '', // <-- state ID province
+                provinsi_id: '', // <-- state ID province
                 cities: [], // <-- state cities
                 city_id: '', // <-- state ID City
                 courier: false, // <-- state pilihan kurir
@@ -248,7 +259,7 @@
 
             //mounted data provinces
             const provinces = onMounted(() => {
-                Api.get('/rajaongkir/provinces')
+                Api.get('/rajaongkir/provinsi')
                     .then(response => {
                         state.provinces = response.data.data // <-- assign state provinces dengan data hasil response
                     }).catch(error => {
@@ -256,11 +267,33 @@
                     })
             })
 
+            //fungsi set alamat 
+            function toggleAddress(stat) {
+                if (stat) {
+                    let user = store.getters['auth/currentUser']
+                    state.provinsi_id = user.province_id
+                    getCities()
+                    state.city_id = user.city_id
+                    state.address = user.address
+                    getCourier()
+                } else {
+                    state.provinsi_id = ''
+                    state.city_id = ''
+                    state.address = ''
+                }
+            }
+
+            function getUser() {
+                //panggil getters dengan nama "currentUser" dari module "auth"
+                let user = store.getters['auth/currentUser']
+                state.name = user.nama
+            }
+
             //fungsi mendapatkan data kota berdasarkan ID provinsi
             function getCities() {
-                Api.get('/rajaongkir/cities', {
+                Api.get('/rajaongkir/kota', {
                         params: {
-                            province_id: state.province_id // ID provinsi
+                            provinsi_id: state.provinsi_id // ID provinsi
                         }
                     })
                     .then(response => {
@@ -330,7 +363,6 @@
 
             //method/function checkout
             function checkout() {
-
                 //ceck apakah ada nama, phone, address dan berat produk ?
                 if (state.name && state.phone && state.address && cartWeight.value) {
 
@@ -338,7 +370,7 @@
                     let data = {
                         name: state.name,
                         phone: state.phone,
-                        province_id: state.province_id,
+                        province_id: state.provinsi_id,
                         city_id: state.city_id,
                         courier_type: state.courier_type,
                         courier_service: state.courier_service,
@@ -347,7 +379,9 @@
                         address: state.address,
                         grandTotal: state.grandTotal
                     }
-                    store.dispatch('cart/checkout', data)
+
+                    console.log(data)
+                    store.dispatch('keranjang/checkout', data)
                         .then(response => {
                             //jika berhasil, arahakan ke detail order dengan parameter snap_token midtrans
                             router.push({
@@ -377,6 +411,8 @@
                 }
             }
             return {
+                toggleAddress,
+                getUser,
                 keranjangs, // <-- state carts
                 cartTotal, // <-- state cartTotal
                 cartWeight, // <-- state cartWeight
