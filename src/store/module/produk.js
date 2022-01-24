@@ -48,7 +48,7 @@ const produk = {
         getDetailProduct({ commit }, slug) {
             //get data sliders ke server
 
-            Api.get(`/produks/${slug}`)
+            Api.get(`/produk/${slug}`)
                 .then(response => {
 
                     //commit ke mutation GET_PRODUCTS dengan response data

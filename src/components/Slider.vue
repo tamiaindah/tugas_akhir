@@ -2,7 +2,7 @@
     <div id="carousel" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item" v-for="(sliders, id) in sliders" :class="{ active: id==0 }" :key='sliders.id'>
-                <img :src="'http://127.0.0.1:8000/storage/produks/'+sliders.image" class="d-block w-100 rounded-lg">
+                <img :src="sliders.image" class="d-block w-100 rounded-lg">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">

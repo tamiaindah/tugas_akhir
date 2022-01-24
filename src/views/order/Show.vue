@@ -14,42 +14,42 @@
                                 <td style="width: 25%"> NO. INVOICE </td>
                                 <td style="width: 1%">:</td>
                                 <td>
-                                    {{ detailOrder.kode_transaksi }}
+                                    {{ detailOrder.invoice }}
                                 </td>
                             </tr>
                             <tr>
                                 <td> NAMA LENGKAP </td>
                                 <td>:</td>
                                 <td>
-                                    {{ detailOrder.nama }}
+                                    {{ detailOrder.name }}
                                 </td>
                             </tr>
                             <tr>
                                 <td> NO. TELP / WA </td>
                                 <td>:</td>
                                 <td>
-                                    {{ detailOrder.no_hp }}
+                                    {{ detailOrder.phone }}
                                 </td>
                             </tr>
                             <tr>
                                 <td> KURIR / SERVICE / COST </td>
                                 <td>:</td>
                                 <td>
-                                    {{ detailOrder.kurir }} / {{ detailOrder.service }} / Rp. {{ detailOrder.ongkir }}
+                                    {{ detailOrder.courier }} / {{ detailOrder.service }} / Rp. {{ detailOrder.cost_courier }}
                                 </td>
                             </tr>
                             <tr>
                                 <td> ALAMAT LENGKAP </td>
                                 <td>:</td>
                                 <td>
-                                    {{ detailOrder.alamat }}
+                                    {{ detailOrder.address }}
                                 </td>
                             </tr>
                             <tr>
                                 <td> TOTAL PEMBELIAN </td>
                                 <td>:</td>
                                 <td>
-                                    Rp. {{ detailOrder.total }}
+                                    Rp. {{ detailOrder.grand_total }}
                                 </td>
                             </tr>
                             <tr>
@@ -57,9 +57,9 @@
                                 <td>:</td>
                                 <td>
                                     <button @click="payment(detailOrder.snap_token)" v-if="detailOrder.status == 'pending'" class="btn btn-primary ">BAYAR SEKARANG</button>
-                                    <button v-else-if="detailOrder.status == 'sukses'" class="btn btn-success">{{ detailOrder.status.toUpperCase() }}</button>
-                                    <button v-else-if="detailOrder.status == 'expired'" class="btn btn-warning">{{ detailOrder.status.toUpperCase() }}</button>
-                                    <button v-else-if="detailOrder.status == 'gagal'" class="btn btn-danger">{{ detailOrder.status.toUpperCase() }}</button>
+                                    <button v-else-if="detailOrder.status == 'success'" class="btn btn-success">{{ detailOrder.status }}</button>
+                                    <button v-else-if="detailOrder.status == 'expired'" class="btn btn-warning">{{ detailOrder.status }}</button>
+                                    <button v-else-if="detailOrder.status == 'failed'" class="btn btn-danger">{{ detailOrder.status }}</button>
                                 </td>
                             </tr>
                         </table>
@@ -72,14 +72,14 @@
                         <hr>
                         <table class="table" style="border-style: solid !important;border-color: rgb(198, 206, 214) !important;">
                             <tbody>
-                                <tr v-for="produk in orders" :key="produk.id" style="background: #edf2f7;">
+                                <tr v-for="produk in productInOrder" :key="produk.id" style="background: #edf2f7;">
                                     <td class="b-none" width="25%">
                                         <div class="wrapper-image-cart">
-                                            <img :src="'http://127.0.0.1:8000/storage/produks/'+produk.foto" style="width: 100%;border-radius: .5rem">
+                                            <img :src="profduk.foto" style="width: 100%;border-radius: .5rem">
                                         </div>
                                     </td>
                                     <td class="b-none" width="50%">
-                                        <h5><b>{{ produk.nama_produk }}</b></h5>
+                                        <h5><b>{{ produk.nama }}</b></h5>
                                         <table class="table-borderless" style="font-size: 14px">
                                             <tr>
                                                 <td style="padding: .20rem">QTY</td>
@@ -89,7 +89,7 @@
                                         </table>
                                     </td>
                                     <td class="b-none text-right">
-                                        <p class="m-0 font-weight-bold">Rp. {{ moneyFormat(produk.harga) }}</p>
+                                        <p class="m-0 font-weight-bold">Rp. {{ moneyFormat(produk.price) }}</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -133,12 +133,6 @@
                 return store.getters['order/detailOrder']
             })
 
-            const orders = computed(() => {
-
-                //panggil getter dengan nama "getOrder" di dalam module "order" Vuex
-                return store.getters['order/getOrder']
-            })
-
             //computed
             const productInOrder = computed(() => {
                 //panggil getter dengan nama "productInOrder" di dalam module "order" Vuex
@@ -178,7 +172,6 @@
                 store,
                 route,
                 router,
-                orders,
                 detailOrder,
                 productInOrder,
                 payment

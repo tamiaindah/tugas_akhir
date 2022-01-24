@@ -8,7 +8,7 @@
                 <div class="card border-0 rounded shadow">
                     <div class="card-body">
                         <h5 class="font-weight-bold"> <i class="fas fa-tachometer-alt"></i> DASHBOARD</h5>
-                        <hr>Selamat Datang <strong>{{ user.nama }}</strong>
+                        <hr>Selamat Datang <strong>{{ user.name }}</strong>
                     </div>
                 </div>
             </div>
@@ -18,7 +18,7 @@
 <script>
     //import customer menu component
     import CustomerMenu from '@/components/CustomerMenu'
-    import { computed, onMounted } from 'vue'
+    import { computed, onMounted, reactive } from 'vue'
     import { useStore } from 'vuex'
 
     export default {

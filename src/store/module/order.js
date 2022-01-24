@@ -71,9 +71,6 @@ const order = {
                     //commit mutation DETAIL_ORDER
                     commit('DETAIL_ORDER', response.data.data)
 
-                    //commit ke mutation GET_ORDER
-                    commit('GET_ORDER', response.data.data.orders)
-
                     //commit mutation PRODUCT_IN_ORDER
                     commit('PRODUCT_IN_ORDER', response.data.produk)
                     
