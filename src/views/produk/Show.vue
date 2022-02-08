@@ -13,16 +13,23 @@
                     <div class="card-body">
                         <label class="font-weight-bold" style="font-size: 20px;"> {{ produk.nama }} </label>
                         <hr>
-                        <div class="price-product" id="price-product" style="font-size: 1.35rem"><span class="font-weight-bold mr-4" style="color: green">Rp. {{ calculateDiscount(produk) }}</span>
-                            <s class="font-weight-bold" style="text-decoration-color:red">Rp. {{ produk.harga }}</s>
+                        <div class="price-product" id="price-product" style="font-size: 1.35rem">
+                            <button type="button" class="btn btn-success position-relative">
+                            Rp. {{ moneyFormat(produk.harga) }}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ produk.diskon }} % 
+                            </span>
+                            </button>
+                            
                         </div>
+                        
                         <table class="table table-borderless mt-3">
                             <tbody>
                                 <tr>
-                                    <td class="font-weight-bold">DISKON</td>
+                                    <td class="font-weight-bold">HARGA SETELAH DISKON</td>
                                     <td>:</td>
                                     <td>
-                                        <button class="btn btn-sm" style="color: #ff2f00;border-color: #ff2f00;"> DISKON {{ produk.diskon }} % </button>
+                                        <button class="btn btn-sm" style="color: #ff2f00;border-color: #ff2f00;"> Rp. {{ calculateDiscount(produk) }} </button>
                                     </td>
                                 </tr>
                                 <tr>

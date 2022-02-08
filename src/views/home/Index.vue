@@ -28,11 +28,15 @@
                         <router-link :to="{name: 'detail_produk', params:{slug: produk.slug }}" class="card-title font-weight-bold" style="font-size:20px">
                             {{ produk.nama }}
                         </router-link>
-                        <div class="discount mt-2" style="color: #999"><s>Rp. {{ moneyFormat(produk.harga) }}</s> <span style="background-color: darkorange" class="badge badge-pill badge-success text-white">DISKON
-                                {{ produk.discount }} %</span>
+                        <div class="discount mt-2" style="color: #999">
+                            <button type="button" class="btn btn-success position-relative">
+                            Rp. {{ moneyFormat(produk.harga) }}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ produk.diskon }} % 
+                            </span>
+                            </button>
                         </div>
-                        <div class="price font-weight-bold mt-3" style="color: #47b04b; font-size:20px">
-                            Rp. {{ moneyFormat(calculateDiscount(produk)) }}</div>
+                        
                         <router-link :to="{name: 'detail_produk', params:{slug: produk.slug}}" class="btn btn-primary btn-md mt-3 btn-block shadow-md">LIHAT PRODUK</router-link>
                     </div>
                 </div>
