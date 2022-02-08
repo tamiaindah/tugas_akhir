@@ -27,7 +27,7 @@
         <div class="card">
         <div class="card-body">
             <h5 class="card-title">Special Flower for gift</h5>
-            <p class="card-text">Berbagai macam bunga untuk menyampaikan ungkapan kami sediakan</p>
+            <p class="card-text">Berbagai macam bunga untuk menyampaikan ungkapan kami sediakan.</p>
         </div>
         </div>
     </div>
